@@ -2,7 +2,7 @@ import db from "../database/postgreSQL.database.js";
 
 export const getClients = async (req, res) => {
   try {
-    const clients = await db.query(`SELECT * FROM costumers;`);
+    const clients = await db.query(`SELECT * FROM customers;`);
     res.status(200).send(clients?.rows);
   } catch (error) {
     res.status(500).send(error.message);
@@ -12,7 +12,7 @@ export const getClients = async (req, res) => {
 export const getClientById = async (req, res) => {
   const { id } = req.params;
   try {
-    const clientById = await db.query(`SELECT * FROM costumers WHERE id=$1;`, [
+    const clientById = await db.query(`SELECT * FROM customers WHERE id=$1;`, [
       id,
     ]);
     if (!clientById) return res.sendStatus(404);
