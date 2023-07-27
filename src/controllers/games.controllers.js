@@ -3,7 +3,7 @@ import db from "../database/postgreSQL.database.js";
 export const getGames = async (req, res) => {
 
     try{
-        const games = db.query(`SELCET * FROM games;`);
+        const games = db.query(`SELECT * FROM games;`);
         res.status(200).send(games.rows);
     } catch (error) {
         res.status(500).send(error.message);
