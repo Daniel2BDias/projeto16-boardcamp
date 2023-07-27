@@ -10,9 +10,9 @@ import clientSchema from "../schemas/clients.schemas.js";
 
 const clientsRouter = Router();
 
-clientsRouter.get("/costumers", getClients);
-clientsRouter.get("/costumers/:id", getClientById);
-clientsRouter.post("/costumers", validateSchema(clientSchema), registerNewClient);
-clientsRouter.put("/costumers/:id", validateSchema(clientSchema), editClientRegistry);
+clientsRouter.get("/customers", getClients);
+clientsRouter.get("/customers/:id", getClientById);
+clientsRouter.post("/customers", validateSchema(clientSchema), registerNewClient);
+clientsRouter.put("/customers/:id", validateSchema(clientSchema), editClientRegistry);
 
 export default clientsRouter;
