@@ -7,8 +7,9 @@ const app = express();
 
 app.use(json());
 app.use(cors());
-dotenv.config;
+dotenv.config();
 
 app.use(routes);
 
-app.listen(process.env.PORT, () => console.log(`Servidor online! Porta: ${process.env.PORT}`));
+const port = (process.env.PORT || 5000);
+app.listen(port, () => console.log(`Servidor online! Porta: ${port}`));
