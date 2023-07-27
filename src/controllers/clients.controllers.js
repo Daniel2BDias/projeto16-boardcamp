@@ -2,7 +2,8 @@ import db from "../database/postgreSQL.database.js";
 
 export const getClients = async (req, res) => {
   try {
-    const clients = await db.query(`SELECT * FROM customers;`);
+    const clients = await db.query(`SELECT (id, name, cpf, date(birthday), phone) FROM customers;`);
+
     res.status(200).send(clients?.rows);
   } catch (error) {
     res.status(500).send(error.message);
@@ -12,11 +13,11 @@ export const getClients = async (req, res) => {
 export const getClientById = async (req, res) => {
   const { id } = req.params;
   try {
-    const clientById = await db.query(`SELECT * FROM customers WHERE id=$1;`, [
+    const clientById = await db.query(`SELECT (id, name, cpf, date(birthday), phone) FROM customers WHERE id=$1;`, [
       id,
     ]);
     if (!clientById) return res.sendStatus(404);
-    res.status(200).send(clientById.rows);
+    res.status(200).send(clientById.rows[0]);
   } catch (error) {
     res.status(500).send(error.message);
   }
@@ -47,8 +48,8 @@ export const editClientRegistry = async (req, res) => {
 
   try {
     const cpfConflict = await db.query(
-      `SELECT * FROM customers WHERE cpf=$1;`,
-      [cpf]
+      `SELECT * FROM customers WHERE cpf=$1 AND NOT id=$2;`,
+      [cpf, id]
     );
     if (cpfConflict?.rows[0]?.cpf) return res.sendStatus(409);
 
