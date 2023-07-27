@@ -50,7 +50,7 @@ export const editClientRegistry = async (req, res) => {
       `SELECT * FROM customers WHERE cpf=$1;`,
       [cpf]
     );
-    if (cpfConflict?.rows?.cpf) return res.sendStatus(409);
+    if (cpfConflict?.rows[0]?.cpf) return res.sendStatus(409);
 
     await db.query(
       `UPDATE customers SET name=$2, cpf=$3, birthday=$4, phone=$5 WHERE id=$1;`,
