@@ -15,7 +15,7 @@ export const registerNewGame = async (req, res) => {
 
     try{
         const alreadyRegistered = await db.query(`SELECT * FROM games WHERE name=$1`, [name]);
-        if(alreadyRegistered) return res.sendStatus(409);
+        if(alreadyRegistered) return res.status(409).send(alreadyRegistered);
 
         await db.query(`INSERT INTO games (name, image, "stockTotal", "pricePerDay") VALUES ($1, $2, $3, $4)`, [name, image, stockTotal, pricePerDay]);
         res.sendStatus(201); 
