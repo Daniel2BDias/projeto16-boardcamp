@@ -2,7 +2,9 @@ import db from "../database/postgreSQL.database.js";
 
 export const getClients = async (req, res) => {
   try {
-    const clients = await db.query(`SELECT (id, name, cpf, TO_CHAR(birthday, 'YYYY-MM-DD') AS birthday, phone) FROM customers;`);
+    const clients = await db.query(
+      `SELECT id, name, cpf, TO_CHAR(birthday, 'YYYY-MM-DD') AS birthday, phone FROM customers;`
+    );
 
     res.status(200).send(clients?.rows);
   } catch (error) {
@@ -13,9 +15,10 @@ export const getClients = async (req, res) => {
 export const getClientById = async (req, res) => {
   const { id } = req.params;
   try {
-    const clientById = await db.query(`SELECT (id, name, cpf, TO_CHAR(birthday, 'YYYY-MM-DD') AS birthday, phone) FROM customers WHERE id=$1;`, [
-      id,
-    ]);
+    const clientById = await db.query(
+      `SELECT id, name, cpf, TO_CHAR(birthday, 'YYYY-MM-DD') AS birthday, phone FROM customers WHERE id=$1;`,
+      [id]
+    );
     if (!clientById) return res.sendStatus(404);
     res.status(200).send(clientById.rows[0]);
   } catch (error) {
