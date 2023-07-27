@@ -33,7 +33,7 @@ export const registerNewClient = async (req, res) => {
       `SELECT * FROM customers WHERE cpf=$1;`,
       [cpf]
     );
-    if (alreadyRegistered?.rows[0]?.name) return res.sendStatus(409);
+    if (alreadyRegistered?.rows[0]?.cpf) return res.sendStatus(409);
 
     await db.query(
       `INSERT INTO customers (name, cpf, birthday, phone) VALUES ($1, $2, $3, $4);`,
