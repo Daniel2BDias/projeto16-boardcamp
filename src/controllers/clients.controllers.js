@@ -20,6 +20,7 @@ export const getClientById = async (req, res) => {
       [id]
     );
     if (!clientById || clientById.rows[0] === "") return res.sendStatus(404);
+    console.log(clientById);
     res.status(200).send(clientById.rows[0]);
   } catch (error) {
     res.status(500).send(error.message);
