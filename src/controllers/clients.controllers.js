@@ -19,7 +19,7 @@ export const getClientById = async (req, res) => {
       `SELECT id, name, cpf, TO_CHAR(birthday, 'YYYY-MM-DD') AS birthday, phone FROM customers WHERE id=$1;`,
       [id]
     );
-    if (!clientById) return res.sendStatus(404);
+    if (!clientById || clientById.rows[0] === "") return res.sendStatus(404);
     res.status(200).send(clientById.rows[0]);
   } catch (error) {
     res.status(500).send(error.message);
