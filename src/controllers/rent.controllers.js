@@ -74,9 +74,11 @@ export const returnGame = async (req, res) => {
     console.log(rentDate?.rows[0]);
 
     const gameReturn = await db.query(
-      `UPDATE rentals SET "returnDate" = NOW(), "delayFee" = $2 WHERE id=$1;`,
+      `UPDATE rentals SET "returnDate"=NOW(), "delayFee"=$2 WHERE id=$1;`,
       [id, null]
     );
+    
+    res.sendStatus(201);
   } catch (error) {
     res.status(500).send(error.message);
   }
