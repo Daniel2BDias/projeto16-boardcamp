@@ -29,6 +29,8 @@ export const registerNewRent = async (req, res) => {
 
     const inStock = db.query(`SELECT * FROM games WHERE id=$1`, [gameId]);
 
+    console.log(existingClient, inStock);
+
     if (existingClient.rows.length === 0 || inStock.rows[0].stockTotal === 0) {
       return res.sendStatus(400);
     }
