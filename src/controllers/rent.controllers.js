@@ -70,18 +70,19 @@ export const returnGame = async (req, res) => {
     const rent = validRent.rows[0];
 
     const rentDateMs = new Date(rent.rentDate).getTime();
-    const returnDateMs = new Date.now();
+    const returnDate = new Date().getDate();
+    const returnDateMs = new Date().now();
     const daysRentedMs = (rent.daysRented * 24 * 60 * 60 * 1000);
     const originalPrice = rent.originalPrice;
     const pricePerDay = originalPrice/rent.daysRented;
 
     console.log(rentDateMs, returnDateMs, daysRentedMs, pricePerDay);
 
-    const fee = Math.abs(rentDateMs - returnDateMs) * pricePerDay;
+    const fee = Math.abs(rentDateMs - returnDateMs)/(1000*60*60*24) * pricePerDay;
 
     const gameReturn = await db.query(
       `UPDATE rentals SET "returnDate"=$2, "delayFee"=$3 WHERE id=$1;`,
-      [id, returnDateMs, fee]
+      [id, returnDate, fee]
     );
 
     res.sendStatus(200);
