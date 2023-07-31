@@ -53,7 +53,7 @@ export const returnGame = async (req, res) => {
   try {
     const validGame = await db.query(`SELECT * FROM games WHERE id=$1`, [id]);
     if (validGame.rows.length === 0) return res.sendStatus(404);
-    if(validGame.rows[0]?.returnDate !== null) return res.sendStatus(400);
+    if(validGame.rows[0]?.returnDate === null) return res.sendStatus(400);
 
     const gameReturn = await db.query(
       `UPDATE rentals SET "returnDate" = NOW() WHERE id=$1;
