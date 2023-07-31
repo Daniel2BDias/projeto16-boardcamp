@@ -62,19 +62,26 @@ export const registerNewRent = async (req, res) => {
 export const returnGame = async (req, res) => {
   const { id } = req.params;
   try {
-    const validRent= await db.query(`SELECT * FROM rentals WHERE id=$1`, [id]);
+    const validRent = await db.query(`SELECT * FROM rentals WHERE id=$1`, [id]);
     if (validRent.rows.length === 0) return res.sendStatus(404);
     if (validRent.rows[0].returnDate !== null) return res.sendStatus(400);
 
     console.log(validRent.rows[0]);
+    const rent = validRent.rows[0];
 
-    const fee = new Date(validRent.rows[0].rentDate).getTime();
+    const rentDateMs = new Date(rent.rentDate).getTime();
+    const returnDateMs = new Date(rent.returnDate).getTime();
+    const daysRentedMs = (rent.daysRented * 24 * 60 * 60 * 1000);
+    const originalPrice = rent.originalPrice;
+    const pricePerDay = originalPrice/rent.daysRented;
 
-    console.log(fee);
+    console.log(rentDateMs, returnDateMs, daysRentedMs, pricePerDay);
+
+    const fee = Math.abs(rentDateMs - returnDateMs) * pricePerDay;
 
     const gameReturn = await db.query(
       `UPDATE rentals SET "returnDate"=NOW(), "delayFee"=$2 WHERE id=$1;`,
-      [id, null]
+      [id, fee]
     );
 
     res.sendStatus(200);
