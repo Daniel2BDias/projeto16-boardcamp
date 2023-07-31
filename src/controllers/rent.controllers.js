@@ -33,6 +33,8 @@ export const registerNewRent = async (req, res) => {
       return res.sendStatus(400);
     }
 
+    console.log(inStock.rows[0].stockTotal, existingClient.rows.length);
+
     const originalPrice = daysRented * inStock.pricePerDay;
 
     await db.query(``);
