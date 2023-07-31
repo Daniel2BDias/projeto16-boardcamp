@@ -64,9 +64,13 @@ export const returnGame = async (req, res) => {
   try {
     const validRent= await db.query(`SELECT * FROM rentals WHERE id=$1`, [id]);
     if (validRent.rows.length === 0) return res.sendStatus(404);
-    if (validRent.rows[0].returnDate === null) return res.sendStatus(400);
+    if (validRent.rows[0].returnDate !== null) return res.sendStatus(400);
 
     console.log(validRent.rows[0]);
+
+    const fee = new Date(validRent.rows[0].rentDate).getTime();
+
+    console.log(fee);
 
     const gameReturn = await db.query(
       `UPDATE rentals SET "returnDate"=NOW(), "delayFee"=$2 WHERE id=$1;`,
