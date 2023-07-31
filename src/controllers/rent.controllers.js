@@ -69,7 +69,7 @@ export const returnGame = async (req, res) => {
     const rent = validRent.rows[0];
 
     const rentDateMs = new Date(rent.rentDate).getTime();
-    const returnDate = new Date().getUTCDate();
+    const returnDate = new Date().toISOString().split("T")[0];
     const returnDateMs = new Date().getTime();
     const daysRentedMs = (rent.daysRented * 24 * 60 * 60 * 1000);
     const originalPrice = rent.originalPrice;
