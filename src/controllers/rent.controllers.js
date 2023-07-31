@@ -9,7 +9,7 @@ export const getRents = async (req, res) => {
         TO_CHAR("returnDate", 'YYYY-MM-DD') AS "returnDate",
         TO_CHAR("rentDate", 'YYYY-MM-DD') AS "rentDate" 
         FROM rentals
-        JOIN customers ON rentals."customersId" = customers.id
+        JOIN customers ON rentals."customerId" = customers.id
         JOIN games ON rentals."gameId" = games.id
         ;`);
 
