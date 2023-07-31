@@ -28,7 +28,7 @@ export const registerNewRent = async (req, res) => {
     ]);
 
     const inStock = await db.query(`SELECT * FROM games WHERE id=$1`, [gameId]);
-    const activeRents = await db.query(`SELECT * FROM rentals WHERE rentals."gameId=$1`, [gameId])
+    const activeRents = await db.query(`SELECT * FROM rentals WHERE rentals."gameId"=$1`, [gameId])
 
     if (existingClient.rows.length === 0 || activeRents.rows.length >= inStock.rows[0].stockTotal) {
       return res.sendStatus(400);
