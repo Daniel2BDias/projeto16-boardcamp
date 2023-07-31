@@ -75,7 +75,7 @@ export const returnGame = async (req, res) => {
     const daysRentedMs = (rent.daysRented * msToDays);
     const originalPrice = rent.originalPrice;
     const pricePerDay = originalPrice/rent.daysRented;
-    const delayDays = Math.floor((returnDateMs - rentDateMs + daysRentedMs)/ msToDays );
+    const delayDays = Math.floor((returnDateMs - rentDateMs - daysRentedMs)/ msToDays );
 
     console.log({rentDateMs, returnDateMs, returnDate, daysRentedMs, pricePerDay, delayDays});
 
@@ -85,6 +85,7 @@ export const returnGame = async (req, res) => {
     if(fee <= 0){
       fee = null;
     }
+
     console.log({fee});
 
     const gameReturn = await db.query(
