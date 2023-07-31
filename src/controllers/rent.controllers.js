@@ -1,4 +1,5 @@
 import db from "../database/postgreSQL.database.js";
+import dayjs from "dayjs";
 
 export const getRents = async (req, res) => {
   try {
@@ -55,10 +56,14 @@ export const returnGame = async (req, res) => {
     if (validGame.rows.length === 0) return res.sendStatus(404);
     if(validGame.rows[0]?.returnDate === null) return res.sendStatus(400);
 
+    const rentDate = await db.query(`SELECT rentals."rentDate" FROM rentals WHERE rentals.gameId = $1`, [id]);
+
+    console.log(rentDate?.rows[0]);
+
     const gameReturn = await db.query(
       `UPDATE rentals SET "returnDate" = NOW() WHERE id=$1;
        UPDATE rentals SET "delayFEE" = fee=$2 WHERE id=$1`,
-      [id, fee]
+      [id, null]
     );
   } catch (error) {
     res.status(500).send(error.message);
