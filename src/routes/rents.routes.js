@@ -13,6 +13,6 @@ const rentsRouter = Router();
 rentsRouter.get("/rentals", getRents);
 rentsRouter.post("/rentals", validateSchema(rentSchema), registerNewRent);
 rentsRouter.post("/rentals/:id/return", returnGame);
-rentsRouter.delete("/retals/:id", deleteRentalEntry);
+rentsRouter.delete("/rentals/:id", deleteRentalEntry);
 
 export default rentsRouter;
