@@ -23,13 +23,11 @@ export const registerNewRent = async (req, res) => {
   const { customerId, gameId, daysRented } = req.body;
 
   try {
-    const existingClient = db.query(`SELECT * FROM customers WHERE id=$1`, [
+    const existingClient = await db.query(`SELECT * FROM customers WHERE id=$1`, [
       customerId,
     ]);
 
-    const inStock = db.query(`SELECT * FROM games WHERE id=$1`, [gameId]);
-
-    console.log(existingClient, inStock);
+    const inStock = await db.query(`SELECT * FROM games WHERE id=$1`, [gameId]);
 
     if (existingClient.rows.length === 0 || inStock.rows[0].stockTotal === 0) {
       return res.sendStatus(400);
