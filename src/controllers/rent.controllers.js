@@ -24,24 +24,34 @@ export const registerNewRent = async (req, res) => {
   const { customerId, gameId, daysRented } = req.body;
 
   try {
-    const existingClient = await db.query(`SELECT * FROM customers WHERE id=$1`, [
-      customerId,
-    ]);
+    const existingClient = await db.query(
+      `SELECT * FROM customers WHERE id=$1`,
+      [customerId]
+    );
 
     const game = await db.query(`SELECT * FROM games WHERE id=$1`, [gameId]);
-    const activeRents = await db.query(`SELECT * FROM rentals WHERE rentals."gameId"=$1`, [gameId])
+    const activeRents = await db.query(
+      `SELECT * FROM rentals WHERE rentals."gameId"=$1`,
+      [gameId]
+    );
 
-    if (existingClient.rows.length === 0 || activeRents.rows.length >= game.rows[0].stockTotal) {
+    if (
+      existingClient.rows.length === 0 ||
+      activeRents.rows.length >= game.rows[0].stockTotal
+    ) {
       return res.sendStatus(400);
     }
 
     const originalPrice = daysRented * game.rows[0].pricePerDay;
 
-    await db.query(`INSERT INTO rentals 
+    await db.query(
+      `INSERT INTO rentals 
     ("customerId", "gameId", "rentDate", "daysRented", "returnDate",
      "originalPrice","delayFee") 
      VALUES ($1, $2, NOW(), $3, ${null}, $4, ${null})
-     ;`, [customerId, gameId, daysRented, originalPrice]);
+     ;`,
+      [customerId, gameId, daysRented, originalPrice]
+    );
 
     res.sendStatus(201);
   } catch (error) {
@@ -54,15 +64,17 @@ export const returnGame = async (req, res) => {
   try {
     const validGame = await db.query(`SELECT * FROM games WHERE id=$1`, [id]);
     if (validGame.rows.length === 0) return res.sendStatus(404);
-    if(validGame.rows[0]?.returnDate === null) return res.sendStatus(400);
+    if (validGame.rows[0]?.returnDate === null) return res.sendStatus(400);
 
-    const rentDate = await db.query(`SELECT rentals."rentDate" FROM rentals WHERE rentals."gameId" = $1`, [id]);
+    const rentDate = await db.query(
+      `SELECT rentals."rentDate" FROM rentals WHERE rentals."gameId" = $1`,
+      [id]
+    );
 
     console.log(rentDate?.rows[0]);
 
     const gameReturn = await db.query(
-      `UPDATE rentals SET "returnDate" = NOW() WHERE id=$1;
-       UPDATE rentals SET "delayFEE" = fee=$2 WHERE id=$1`,
+      `UPDATE rentals SET "returnDate" = NOW(), "delayFee" = fee=$2 WHERE id=$1;`,
       [id, null]
     );
   } catch (error) {
