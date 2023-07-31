@@ -76,17 +76,12 @@ export const returnGame = async (req, res) => {
     const originalPrice = rent.originalPrice;
     const pricePerDay = originalPrice/rent.daysRented;
     const delayDays = Math.floor((returnDateMs - rentDateMs - daysRentedMs)/ msToDays );
-
-    console.log({rentDateMs, returnDateMs, returnDate, daysRentedMs, pricePerDay, delayDays});
-
     
     let fee = delayDays * pricePerDay;
 
     if(fee <= 0){
       fee = null;
     }
-
-    console.log({fee});
 
     const gameReturn = await db.query(
       `UPDATE rentals SET "returnDate"=$2, "delayFee"=$3 WHERE id=$1;`,
@@ -107,13 +102,12 @@ export const deleteRentalEntry = async (req, res) => {
     ]);
 
     if (finishedRental.rows[0].returnDate === null) return res.sendStatus(400);
+    if (finishedRental.rows.length === 0) return res.sendStatus(404);
 
-    const deletion = await db.query(
+    await db.query(
       `DELETE * FROM rentals WHERE id=$1 AND NOT rentals."returnDate" = ${null}`,
       [id]
     );
-
-    if (deletion.rows.length === 0) return res.sendStatus(404);
 
     res.sendStatus(200);
   } catch (error) {
