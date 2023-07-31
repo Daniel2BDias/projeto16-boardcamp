@@ -39,7 +39,7 @@ export const registerNewRent = async (req, res) => {
     await db.query(`INSERT INTO rentals 
     ("customerId", "gameId", "rentDate", "daysRented", "returnDate",
      "originalPrice","delayFee") 
-     VALUES ($1, $2, DATE(), $3, ${null}, $4, ${null})
+     VALUES ($1, $2, NOW(), $3, ${null}, $4, ${null})
      ;`, [customerId, gameId, daysRented, originalPrice]);
 
     res.sendStatus(201);
