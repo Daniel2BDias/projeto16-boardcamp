@@ -77,8 +77,8 @@ export const returnGame = async (req, res) => {
       `UPDATE rentals SET "returnDate"=NOW(), "delayFee"=$2 WHERE id=$1;`,
       [id, null]
     );
-    
-    res.sendStatus(201);
+
+    res.sendStatus(200);
   } catch (error) {
     res.status(500).send(error.message);
   }
