@@ -101,11 +101,11 @@ export const deleteRentalEntry = async (req, res) => {
       id,
     ]);
 
-    if (finishedRental.rows[0].returnDate === null) return res.sendStatus(400);
     if (finishedRental.rows.length === 0) return res.sendStatus(404);
+    if (finishedRental.rows[0].returnDate === null) return res.sendStatus(400);
 
     const deletion = await db.query(
-      `DELETE FROM rentals WHERE id=$1 AND NOT rentals."returnDate" = ${null}`,
+      `DELETE FROM rentals WHERE id=$1;`,
       [id]
     );
 
