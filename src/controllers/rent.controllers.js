@@ -62,16 +62,11 @@ export const registerNewRent = async (req, res) => {
 export const returnGame = async (req, res) => {
   const { id } = req.params;
   try {
-    const validGame = await db.query(`SELECT * FROM games WHERE id=$1`, [id]);
-    if (validGame.rows.length === 0) return res.sendStatus(404);
-    if (validGame.rows[0]?.returnDate === null) return res.sendStatus(400);
+    const validRent= await db.query(`SELECT * FROM rentals WHERE id=$1`, [id]);
+    if (validRent.rows.length === 0) return res.sendStatus(404);
+    if (validRent.rows[0].returnDate === null) return res.sendStatus(400);
 
-    const rentDate = await db.query(
-      `SELECT rentals."rentDate" FROM rentals WHERE rentals."gameId" = $1`,
-      [id]
-    );
-
-    console.log(rentDate?.rows[0]);
+    console.log(validRent.rows[0]);
 
     const gameReturn = await db.query(
       `UPDATE rentals SET "returnDate"=NOW(), "delayFee"=$2 WHERE id=$1;`,
