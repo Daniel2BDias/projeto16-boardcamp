@@ -56,7 +56,7 @@ export const returnGame = async (req, res) => {
     if (validGame.rows.length === 0) return res.sendStatus(404);
     if(validGame.rows[0]?.returnDate === null) return res.sendStatus(400);
 
-    const rentDate = await db.query(`SELECT rentals."rentDate" FROM rentals WHERE rentals.gameId = $1`, [id]);
+    const rentDate = await db.query(`SELECT rentals."rentDate" FROM rentals WHERE rentals."gameId" = $1`, [id]);
 
     console.log(rentDate?.rows[0]);
 
